@@ -12,6 +12,7 @@ const Styled = {
     height: var(--xl);
     margin: var(--xm) 0;
     position: relative;
+    min-width: calc(5 * var(--l));
   `,
   FilledStarsWrapper: styled.div<FilledStarsProps>(
     ({ value }) => css`
@@ -22,7 +23,7 @@ const Styled = {
     `
   ),
   FilledStars: styled.div`
-    width: calc(6 * var(--l));
+    min-width: calc(5 * var(--l));
   `,
   EmptyStars: styled.div`
     display: flex;
