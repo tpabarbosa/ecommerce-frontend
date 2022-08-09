@@ -87,7 +87,6 @@ const CartItem = ({ item }: CartItemProps) => {
   const handleRemove = (e: React.MouseEvent) => {
     // e.preventDefault();
     e.stopPropagation();
-    console.log(item.item_id);
     cart.removeProduct(item.item_id);
   };
 

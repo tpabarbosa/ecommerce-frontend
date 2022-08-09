@@ -84,7 +84,6 @@ const Styled = {
 };
 
 const Reviews = ({ reviews, baseUrl }: ReviewsProps) => {
-  console.log(reviews);
   return (
     <Styled.Wrapper>
       {reviews &&

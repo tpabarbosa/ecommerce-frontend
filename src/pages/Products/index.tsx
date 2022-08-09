@@ -6,7 +6,6 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   // const [categorySlug, setCategorySlug] = useState('');
   useEffect(() => {
-    console.log(params);
     if (params.categorySlug) {
       // setCategorySlug(params.categorySlug);
     } else {

@@ -21,7 +21,6 @@ function prepare() {
     process.env.NODE_ENV === 'development' &&
     process.env.REACT_APP_USE_MOCK_SERVER === 'yes'
   ) {
-    console.log('Worker');
     const { worker } = require('./__tests__/server/browser');
     return worker.start();
   }

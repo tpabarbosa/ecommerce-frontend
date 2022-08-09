@@ -50,8 +50,6 @@ const cartReducer = (state: ICart, action: CartAction): ICart => {
 
     case 'REMOVE_PRODUCT':
       // if product does not exist in cart, do nothing
-      console.log(action.value);
-      console.log('BEFORE DELETE', state);
       const productToRemove = state.items.find(
         (p) => p.item_id === action.value
       );

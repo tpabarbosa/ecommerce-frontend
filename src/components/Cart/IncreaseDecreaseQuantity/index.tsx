@@ -45,7 +45,6 @@ const IncreaseDecreaseQuantity = ({
   };
 
   const handleChange = (e: any) => {
-    console.log(e.target.value);
     const val = Number(e.target.value);
     setInputValue(e.target.value);
     if (val) {

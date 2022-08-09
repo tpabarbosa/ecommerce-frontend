@@ -103,7 +103,6 @@ const useUser = () => {
       password,
     });
     if (loggedUser && loggedUser.status === 'success') {
-      console.log(loggedUser);
       storage.set('token', loggedUser.data.token);
       user.dispatch({
         type: 'SET_USER',
@@ -171,7 +170,6 @@ const useUser = () => {
       lastname,
     });
     if (loggedUser && loggedUser.status === 'success') {
-      console.log(loggedUser);
       storage.set('token', loggedUser.data.token);
       user.dispatch({
         type: 'SET_USER',
