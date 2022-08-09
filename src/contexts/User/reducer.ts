@@ -3,10 +3,16 @@ import { UserAction, IUserAuth, IUser } from './user.interfaces';
 const userReducer = (state: IUserAuth, action: UserAction) => {
   switch (action.type) {
     case 'SET_USER':
-      return { ...state, isLoggedIn: true, ...action.value };
+      return { ...state, wishList: [], isLoggedIn: true, ...action.value };
 
     case 'CLEAR_USER': {
-      return { ...state, isLoggedIn: false, user: {} as IUser, token: '' };
+      return {
+        ...state,
+        wishList: [],
+        isLoggedIn: false,
+        user: {} as IUser,
+        token: '',
+      };
     }
     case 'SET_WISHLIST': {
       return { ...state, wishList: action.value };
