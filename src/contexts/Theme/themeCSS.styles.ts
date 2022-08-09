@@ -105,30 +105,35 @@ const roundButtonSize = (
   switch (size) {
     case 'x-small':
       return css`
+        min-width: var(--xs);
         width: var(--xs);
         height: var(--xs);
         font-size: calc(var(--xs) / 2);
       `;
     case 'small':
       return css`
+        min-width: var(--s);
         width: var(--s);
         height: var(--s);
         font-size: calc(var(--s) / 2);
       `;
     case 'medium':
       return css`
+        min-width: var(--m);
         width: var(--m);
         height: var(--m);
         font-size: calc(var(--m) / 2);
       `;
     case 'large':
       return css`
+        min-width: var(--l);
         width: var(--l);
         height: var(--l);
         font-size: calc(var(--l) / 2);
       `;
     case 'custom':
       return css`
+        min-width: ${custom};
         width: ${custom};
         height: ${custom};
         font-size: calc(${custom} / 2);

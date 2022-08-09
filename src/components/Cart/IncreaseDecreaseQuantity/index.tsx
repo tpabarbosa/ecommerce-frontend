@@ -20,7 +20,7 @@ const Styled = {
   Input: styled.input`
     font-size: var(--xm);
     font-weight: bold;
-    max-width: calc(1.5 * var(--xxl));
+    max-width: var(--xxl);
     border: 1px solid var(--p-color);
     padding: var(--xxs) 0;
     text-align: center;
