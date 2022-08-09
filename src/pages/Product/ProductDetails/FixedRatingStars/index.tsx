@@ -2,7 +2,7 @@ import { FaStar, FaRegStar } from 'react-icons/fa';
 import styled, { css } from 'styled-components';
 
 type FilledStarsProps = {
-  value: number;
+  val: number;
 };
 
 const Styled = {
@@ -15,10 +15,10 @@ const Styled = {
     min-width: calc(5 * var(--l));
   `,
   FilledStarsWrapper: styled.div<FilledStarsProps>(
-    ({ value }) => css`
+    ({ val }) => css`
       position: absolute;
       top: 0;
-      width: calc(${value / 2} * var(--l));
+      width: calc(${val / 2} * var(--l));
       overflow: hidden;
     `
   ),
@@ -53,14 +53,19 @@ const FixedRatingStars = ({ value, count }: FixedRatingStarsProps) => {
         <FaRegStar />
         <FaRegStar />
         <FaRegStar />
-        {count && (
+        {count === 0 && (
+          <>
+            <span>No reviews</span>
+          </>
+        )}
+        {count !== undefined && count !== 0 && value !== 0 && (
           <>
             <span> ({value}) </span>
             <span>Reviewed by {count} users</span>
           </>
         )}
       </Styled.EmptyStars>
-      <Styled.FilledStarsWrapper value={value}>
+      <Styled.FilledStarsWrapper val={value}>
         <Styled.FilledStars>
           <FaStar />
           <FaStar />
