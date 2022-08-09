@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import useModal from '../../../../components/Layout/Modal/useModal';
 import { IPhoto } from '../../../../models';
 import ImagesDisplayerModal from './ImagesDisplayerModal';
@@ -17,15 +17,19 @@ const Styled = {
     margin: var(--s) 0;
     margin-bottom: 0;
   `,
-  Thumbnails: styled.img`
-    width: 20%;
-    /* height: 20%; */
-    display: inline-block;
-    font-size: var(--xs);
-  `,
+  Thumbnails: styled.img<{ disabled: boolean }>(
+    ({ disabled }) => css`
+      width: 20%;
+      /* height: 20%; */
+      display: inline-block;
+      font-size: var(--xs);
+      cursor: ${disabled ? 'default' : 'pointer'};
+    `
+  ),
   Image: styled.img`
     width: 100%;
     height: 100%;
+    cursor: pointer;
   `,
 };
 
@@ -56,6 +60,7 @@ const ImagesDisplayer = ({ images }: ImagesDisplayerProps) => {
                 src={image.url}
                 alt={image.description || 'No description'}
                 onClick={() => setCurrentImage(index)}
+                disabled={currentImage === index}
               />
             ))}
         </Styled.ThumbnailsWrapper>
