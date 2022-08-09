@@ -43,7 +43,7 @@ type MenuModalProps = {
   modal: IUseModal;
 };
 
-const MenuModal = ({ modal }: MenuModalProps) => {
+const MenuModal = ({ modal }: MenuModalProps): JSX.Element => {
   const user = useUser();
   const { isOpen } = modal;
   const [categories, setCategories] = useState<ICategory[]>();
