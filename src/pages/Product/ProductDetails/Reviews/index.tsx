@@ -1,18 +1,19 @@
 import { FaRegThumbsUp, FaRegThumbsDown } from 'react-icons/fa';
 import styled from 'styled-components';
 import Pagination from '../../../../components/Layout/Pagination';
+import { ThemeStyled } from '../../../../contexts/Theme/themeCSS.styles';
 import { IReviewsList } from '../../../../models';
 import FixedRatingStars from '../FixedRatingStars';
 
 type ReviewsProps = {
   reviews: IReviewsList;
-  baseUrl: string;
+  onChangeReviewsPage: (newPage: number) => void;
 };
 
 const Styled = {
   Wrapper: styled.div`
     width: 100%;
-    margin: var(--xl) auto;
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
   `,
@@ -24,7 +25,7 @@ const Styled = {
     display: flex;
     flex-direction: column;
     @media (min-width: 720px) {
-      max-width: 40%;
+      max-width: 45%;
     }
 
     @media (min-width: 960px) {
@@ -40,7 +41,7 @@ const Styled = {
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
-
+    gap: var(--l);
     @media (min-width: 768px) {
       flex-direction: row;
       padding-top: 0;
@@ -49,11 +50,12 @@ const Styled = {
   Title: styled.h4`
     font-size: var(--l);
     font-weight: bold;
+    text-align: center;
   `,
   Content: styled.span`
     padding: var(--l) var(--s);
   `,
-  ContentWrapper: styled.div`
+  ContentWrapper: styled(ThemeStyled.Box).attrs({ type: 'tertiary' })`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -61,7 +63,7 @@ const Styled = {
       flex-direction: row;
     }
   `,
-  UserWrapper: styled.span`
+  UserWrapper: styled(ThemeStyled.Box).attrs({ type: 'secondary' })`
     padding: var(--l) var(--l);
     display: flex;
     flex-direction: column;
@@ -76,40 +78,46 @@ const Styled = {
     font-size: var(--xm);
   `,
   Recommend: styled.div`
-    font-size: var(--l);
+    font-size: var(--xl);
   `,
   Date: styled.div`
     font-size: var(--s);
   `,
 };
 
-const Reviews = ({ reviews, baseUrl }: ReviewsProps) => {
+const Reviews = ({ reviews, onChangeReviewsPage }: ReviewsProps) => {
   return (
-    <Styled.Wrapper>
-      {reviews &&
-        reviews.reviews.map((review) => (
-          <Styled.ItemWrapper key={review.id}>
-            <Styled.TitleWrapper>
-              <Styled.Title>{review.title}</Styled.Title>
-              <FixedRatingStars value={review.rating} />
-            </Styled.TitleWrapper>
-            <Styled.ContentWrapper>
-              <Styled.Content>{review.content}</Styled.Content>
-              <Styled.UserWrapper>
-                <Styled.User>{review.user.firstname}</Styled.User>
-                <Styled.Recommend>
-                  {review.recommend ? <FaRegThumbsUp /> : <FaRegThumbsDown />}
-                </Styled.Recommend>
-                <Styled.Date>
-                  <div>last update</div>
-                  {new Date(review.updated_at).toLocaleDateString()}
-                </Styled.Date>
-              </Styled.UserWrapper>
-            </Styled.ContentWrapper>
-          </Styled.ItemWrapper>
-        ))}
-      <Pagination page={reviews.page} pages={reviews.pages} baseUrl={baseUrl} />
-    </Styled.Wrapper>
+    <>
+      <Styled.Wrapper>
+        {reviews &&
+          reviews.reviews.map((review) => (
+            <Styled.ItemWrapper key={review.id}>
+              <Styled.TitleWrapper>
+                <Styled.Title>{review.title}</Styled.Title>
+                <FixedRatingStars value={review.rating} />
+              </Styled.TitleWrapper>
+              <Styled.ContentWrapper>
+                <Styled.Content>{review.content}</Styled.Content>
+                <Styled.UserWrapper>
+                  <Styled.User>{review.user.firstname}</Styled.User>
+                  <Styled.Recommend>
+                    {review.recommend ? <FaRegThumbsUp /> : <FaRegThumbsDown />}
+                  </Styled.Recommend>
+                  <Styled.Date>
+                    <div>last update</div>
+                    {new Date(review.updated_at).toLocaleDateString()}
+                  </Styled.Date>
+                </Styled.UserWrapper>
+              </Styled.ContentWrapper>
+            </Styled.ItemWrapper>
+          ))}
+      </Styled.Wrapper>
+      <Pagination
+        page={reviews.page}
+        pages={reviews.pages}
+        onChangePage={onChangeReviewsPage}
+      />
+    </>
   );
 };
 

@@ -3,12 +3,14 @@ import { IProductsList } from '../../../models';
 import productsHttp from '../../../services/produtcsHttp';
 import ProductCardList from '../../../components/ProductCardList';
 
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import Pagination from '../../../components/Layout/Pagination';
 import { IQuery } from '../../../services/HttpService';
+import { parsePageQuery } from '../../../helpers/parsers';
 
 const CategoryProducts = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [categorySlug, setCategorySlug] = useState('');
   const [query, setQuery] = useState<IQuery>();
@@ -32,24 +34,26 @@ const CategoryProducts = () => {
   useEffect(() => {
     if (params.categorySlug) {
       setCategorySlug(params.categorySlug);
+      const parsedQuery = parsePageQuery(
+        `/products${params.categorySlug}`,
+        searchParams
+      );
 
-      const queryObj = {} as IQuery;
-
-      let queryStr = '';
-      searchParams.forEach((value, key) => {
-        queryObj[key] = value;
-        if (key !== 'page' && key !== 'pages') {
-          queryStr += `&${key}=${value}`;
-        }
-      });
-      setQuery(queryObj);
-      setBaseUrl(`/products/${params.categorySlug}?${queryStr}`);
+      if (parsedQuery.str !== baseUrl) {
+        setBaseUrl(parsedQuery.str);
+        setQuery(parsedQuery.obj);
+        return;
+      }
     } else {
       setCategorySlug('');
-      setQuery({} as IQuery);
-      setBaseUrl('');
     }
-  }, [searchParams, params]);
+    setQuery({} as IQuery);
+    setBaseUrl('');
+  }, [searchParams, params, baseUrl]);
+
+  const handleChangePage = (newPage: number) => {
+    navigate(`${baseUrl}&page=${newPage}`);
+  };
 
   return (
     <>
@@ -67,7 +71,7 @@ const CategoryProducts = () => {
           <Pagination
             page={productsList.page}
             pages={productsList.pages}
-            baseUrl={baseUrl}
+            onChangePage={handleChangePage}
           />
         </>
       )}

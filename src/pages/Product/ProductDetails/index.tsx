@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import AddToCartButton from '../../../components/Cart/AddToCartButton';
 import IncreaseDecreaseQuantity from '../../../components/Cart/IncreaseDecreaseQuantity';
@@ -8,7 +7,7 @@ import Sizes from '../../../components/Cart/Sizes';
 import useCart from '../../../contexts/Cart';
 import { ICartProduct } from '../../../contexts/Cart/cart.interfaces';
 import { ThemeStyled } from '../../../contexts/Theme/themeCSS.styles';
-import { parsePageQuery, parsePrice } from '../../../helpers/parsers';
+import { parsePrice } from '../../../helpers/parsers';
 import { IProductDetails, IReviewsList } from '../../../models';
 import { IQuery } from '../../../services/HttpService';
 import productsHttp from '../../../services/produtcsHttp';
@@ -42,11 +41,15 @@ const Styled = {
     font-weight: bold;
   `,
   Block: styled.div`
-    margin: calc(2 * var(--xxl));
+    margin: calc(2 * var(--xxl)) var(--s);
     font-size: var(--xm);
 
     p {
       margin: var(--l);
+    }
+
+    h3 {
+      padding-left: var(--xxl);
     }
   `,
   Price: styled.div`
@@ -91,14 +94,12 @@ const Styled = {
   `,
 };
 
+const REVIEWS_QUERY: IQuery = { limit: 1, page: 1 };
+
 const ProductDetails = () => {
   const [product, setProduct] = useState<IProductDetails>();
   const [reviews, setReviews] = useState<IReviewsList>();
   const params = useParams();
-  const [searchParams] = useSearchParams();
-  const [baseUrl, setBaseUrl] = useState('');
-  const location = useLocation();
-  // const [currentQuantity, setCurrentQuantity] = useState(1);
   const cart = useCart();
   const [isInCart, setIsInCart] = useState(false);
   const [cartItem, setCartItem] = useState<ICartProduct>();
@@ -115,7 +116,6 @@ const ProductDetails = () => {
         if (cartProduct) {
           setIsInCart(true);
           setCartItem(cartProduct);
-          // setCurrentQuantity(cartProduct.quantity);
         }
       }
     }
@@ -146,17 +146,16 @@ const ProductDetails = () => {
   }, [cart, product]);
 
   useEffect(() => {
-    const parsedQuery = parsePageQuery(`${location.pathname}`, searchParams);
-
-    if (parsedQuery.str !== baseUrl) {
-      setBaseUrl(parsedQuery.str);
-    }
-    getReviews(parsedQuery.obj);
+    getReviews(REVIEWS_QUERY);
   }, [product]);
 
   useEffect(() => {
     getDetails();
   }, [params]);
+
+  const handleChangeReviewPage = (newPage: number) => {
+    getReviews({ ...REVIEWS_QUERY, page: newPage });
+  };
 
   return (
     <Styled.Wrapper>
@@ -235,7 +234,10 @@ const ProductDetails = () => {
             <>
               <Styled.Block>
                 <Styled.Title>Reviews</Styled.Title>
-                <Reviews reviews={reviews} baseUrl={baseUrl} />
+                <Reviews
+                  reviews={reviews}
+                  onChangeReviewsPage={handleChangeReviewPage}
+                />
               </Styled.Block>
             </>
           )}

@@ -3,11 +3,12 @@ import { IProductsList } from '../../../models';
 import productsHttp from '../../../services/produtcsHttp';
 import ProductCardList from '../../../components/ProductCardList';
 import { parsePageQuery } from '../../../helpers/parsers';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Pagination from '../../../components/Layout/Pagination';
 import { IQuery } from '../../../services/HttpService';
 
 const AllProducts = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [productsList, setProductsList] = useState<IProductsList>();
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,6 +32,10 @@ const AllProducts = () => {
     getProducts(parsedQuery.obj);
   }, [searchParams, baseUrl]);
 
+  const handleChangePage = (newPage: number) => {
+    navigate(`${baseUrl}&page=${newPage}`);
+  };
+
   return (
     <>
       {productsList && (
@@ -43,7 +48,7 @@ const AllProducts = () => {
           <Pagination
             page={productsList.page}
             pages={productsList.pages}
-            baseUrl={baseUrl}
+            onChangePage={handleChangePage}
           />
         </>
       )}

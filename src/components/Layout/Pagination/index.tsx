@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { ThemeStyled } from '../../../contexts/Theme/themeCSS.styles';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 interface IPagination {
   page: number;
   pages: number;
-  baseUrl: string;
+  onChangePage: (newPage: number) => void;
 }
 
 const Styled = {
@@ -26,15 +26,13 @@ const Styled = {
   `,
 };
 
-const Pagination = ({ page, pages, baseUrl }: IPagination) => {
-  const navigate = useNavigate();
-
+const Pagination = ({ page, pages, onChangePage }: IPagination) => {
   const handleNext = () => {
-    navigate(`${baseUrl}&page=${page + 1}`);
+    onChangePage(page + 1);
   };
 
   const handlePrevious = () => {
-    navigate(`${baseUrl}&page=${page - 1}`);
+    onChangePage(page - 1);
   };
 
   return (
