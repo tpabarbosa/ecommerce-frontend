@@ -8,6 +8,7 @@ import useModal from '../Modal/useModal';
 import CartModal from '../../Cart/CartModal';
 import MenuModal from './MenuModal';
 import useUser from '../../../contexts/User';
+import ProtectedContent from '../ProtectedContent';
 
 const Styled = {
   Wrapper: styled(ThemeStyled.Box).attrs({ as: 'section', type: 'tertiary' })`
@@ -50,22 +51,21 @@ const NavLine = () => {
       <MenuModal modal={menuModal} />
 
       <Styled.CartButtonWrapper>
-        {user.isLoggedIn && (
-          <>
-            <Styled.Button onClick={() => navigate('/user/wishlist')}>
-              <FaBookmark />
-            </Styled.Button>
-            <CartButton onClick={cartModal.toggle} />
-            <Styled.Button onClick={() => navigate('/logout')}>
-              <FaSignOutAlt />
-            </Styled.Button>
-          </>
-        )}
-        {!user.isLoggedIn && (
+        <ProtectedContent condition={user.isLoggedIn}>
+          <Styled.Button onClick={() => navigate('/user/wishlist')}>
+            <FaBookmark />
+          </Styled.Button>
+          <CartButton onClick={cartModal.toggle} />
+          <Styled.Button onClick={() => navigate('/logout')}>
+            <FaSignOutAlt />
+          </Styled.Button>
+        </ProtectedContent>
+
+        <ProtectedContent condition={!user.isLoggedIn}>
           <Styled.Button onClick={() => navigate('/login')}>
             <FaSignInAlt />
           </Styled.Button>
-        )}
+        </ProtectedContent>
       </Styled.CartButtonWrapper>
       <CartModal modal={cartModal} />
     </Styled.Wrapper>
