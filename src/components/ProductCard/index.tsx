@@ -5,7 +5,6 @@ import { IProduct } from '../../models';
 import { ThemeStyled } from '../../contexts/Theme/themeCSS.styles';
 
 import { parsePrice } from '../../helpers/parsers';
-import useUser from '../../contexts/User';
 
 import AddToCartButton from '../Cart/AddToCartButton';
 import ToogleToWishListButton from '../WishList/ToggleToWishListButton';
@@ -104,8 +103,6 @@ const Styled = {
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const user = useUser();
-
   return (
     <Styled.Wrapper>
       <Link to={`/product/${product.slug}`}>
@@ -142,7 +139,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div></div>
         </div>
       </Link>
-      {user.isLoggedIn && <ToogleToWishListButton product={product} />}
+      <ToogleToWishListButton product={product} />
       <AddToCartButton product={product} />
     </Styled.Wrapper>
   );

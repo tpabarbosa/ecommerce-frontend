@@ -5,6 +5,7 @@ import useUser from '../../contexts/User';
 import { IProduct } from '../../models';
 import { FaBookmark, FaCheckDouble } from 'react-icons/fa';
 import TooltipBox from '../Layout/TooltipBox';
+import useRequireLoginAction from '../../hooks/useRequireLoginAction';
 
 type ToogleToWishListButtonProps = {
   product: IProduct;
@@ -34,16 +35,6 @@ const ToogleToWishListButton = ({ product }: ToogleToWishListButtonProps) => {
   const user = useUser();
   const [inWishList, setInWishList] = useState(false);
 
-  const handleToggleWishlist = () => {
-    if (inWishList) {
-      user.removeWishListProduct(product);
-      setInWishList(false);
-    } else {
-      user.addWishListProduct(product);
-      setInWishList(true);
-    }
-  };
-
   const isInWishlist = (prod: IProduct, wishList: IProduct[]) => {
     const isInList = wishList.find((item) => item.id === prod.id);
     if (isInList) {
@@ -52,15 +43,32 @@ const ToogleToWishListButton = ({ product }: ToogleToWishListButtonProps) => {
     return false;
   };
 
+  const handleToggleWishlist = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    if (!action.isPerformingAction) {
+      if (isInWishlist(product, user.wishList)) {
+        await user.removeWishListProduct(product);
+        setInWishList(false);
+      } else {
+        await user.addWishListProduct(product);
+        setInWishList(true);
+      }
+    }
+  };
+
+  const action = useRequireLoginAction({
+    actionCb: handleToggleWishlist,
+    message: 'You must be logged in to add items to wish list',
+    actionName: 'toggleToWishlist',
+    actionValue: `${product.id}`,
+  });
+
   useEffect(() => {
     setInWishList(isInWishlist(product, user.wishList));
-  }, [user.wishList]);
+  }, [user.wishList, user]);
 
   return (
-    <Styled.FavoriteButton
-      inWishList={inWishList}
-      onClick={handleToggleWishlist}
-    >
+    <Styled.FavoriteButton inWishList={inWishList} onClick={action.handle}>
       <TooltipBox
         element={inWishList ? <FaCheckDouble /> : <FaBookmark />}
         tooltip={

@@ -8,7 +8,7 @@ import ToogleToWishListButton from '../../../components/WishList/ToggleToWishLis
 import useCart from '../../../contexts/Cart';
 import { ICartProduct } from '../../../contexts/Cart/cart.interfaces';
 import { ThemeStyled } from '../../../contexts/Theme/themeCSS.styles';
-import useUser from '../../../contexts/User';
+
 import { parsePrice } from '../../../helpers/parsers';
 import { IProductDetails, IReviewsList } from '../../../models';
 import { IQuery } from '../../../services/HttpService';
@@ -101,7 +101,6 @@ const Styled = {
 const REVIEWS_QUERY: IQuery = { limit: 1, page: 1 };
 
 const ProductDetails = () => {
-  const user = useUser();
   const [product, setProduct] = useState<IProductDetails>();
   const [reviews, setReviews] = useState<IReviewsList>();
   const params = useParams();
@@ -169,7 +168,7 @@ const ProductDetails = () => {
           <Styled.Header>
             <Styled.ImagesWrapper>
               <ImagesDisplayer images={product.photos} />
-              {user.isLoggedIn && <ToogleToWishListButton product={product} />}
+              <ToogleToWishListButton product={product} />
             </Styled.ImagesWrapper>
 
             <Styled.ProductWrapper>
