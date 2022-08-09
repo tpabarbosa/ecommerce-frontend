@@ -84,7 +84,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [message, setMessage] = useState('');
+  const [redirectMessage, setRedirectMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -102,7 +102,7 @@ const Login = () => {
       setErrorMessage(msg);
     } else {
       setIsLoading(false);
-      navigate('/user');
+      // navigate('/user');
     }
   };
 
@@ -112,7 +112,14 @@ const Login = () => {
 
   useEffect(() => {
     if (user.isLoggedIn) {
-      navigate('/user');
+      if (searchParams && searchParams.has('redirect')) {
+        const base64 = searchParams.get('redirect') as string;
+        const url = Buffer.from(base64, 'base64').toString('utf-8');
+        navigate(url);
+        return;
+      } else {
+        navigate('/user');
+      }
     }
   }, [user.isLoggedIn]);
 
@@ -120,15 +127,17 @@ const Login = () => {
     if (searchParams && searchParams.has('msg')) {
       const msg = searchParams.get('msg') as string;
 
-      setMessage(Buffer.from(msg, 'base64').toString('utf-8'));
+      setRedirectMessage(Buffer.from(msg, 'base64').toString('utf-8'));
     } else {
-      setMessage('');
+      setRedirectMessage('');
     }
   }, [searchParams]);
 
   return (
     <ThemeStyled.PageContentWrapper>
-      {message && <ErrorMessage message={message} size={'large'} />}
+      {redirectMessage && (
+        <ErrorMessage message={redirectMessage} size={'large'} />
+      )}
       <Styled.Form onSubmit={handleSubmit(onSubmit)}>
         <Styled.Title>Login</Styled.Title>
         <Styled.InputWrapper>

@@ -15,18 +15,26 @@ export const parsePrice = (price: number, discount?: number) => {
 export const parseRedirectUrl = (
   redirectTo: string,
   location: Location,
-  message?: string
+  options?: { message?: string; action?: string }
 ) => {
-  let redirect = `${redirectTo}?redirect="${location.pathname}`;
+  let url = `${location.pathname}`;
+  if (location.search || options?.action) {
+    url += '?';
+  }
   if (location.search) {
-    redirect += `?${location.search}`;
+    url += `${location.search}`;
+  }
+  if (options?.action) {
+    url += `&action=${options.action}`;
+  }
+  let redirect = `${redirectTo}?redirect=${Buffer.from(url).toString(
+    'base64'
+  )}`;
+  //to decode: Buffer.from(base64Token, 'base64').toString('utf-8')}
+  if (options?.message) {
+    redirect += `&msg=${Buffer.from(options.message).toString('base64')}`;
   }
 
-  //to decode: Buffer.from(base64Token, 'base64').toString('utf-8')
-  if (message) {
-    redirect += `&msg=${Buffer.from(message).toString('base64')}`;
-  }
-  redirect += `"`;
   return redirect;
 };
 

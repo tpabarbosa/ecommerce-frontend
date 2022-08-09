@@ -3,21 +3,20 @@ import { parseRedirectUrl } from '../../helpers/parsers';
 type ProtectedProps = {
   condition: boolean;
   children: JSX.Element;
-  redirectTo?: string;
+  redirectTo: string;
+  options?: { message?: string; action?: string };
 };
 
 const ProtectedRoute = ({
   condition,
   children,
   redirectTo,
+  options,
 }: ProtectedProps) => {
   const location = useLocation();
 
   const fallback = () => {
-    if (redirectTo) {
-      return <Navigate to={parseRedirectUrl('/login', location)} />;
-    }
-    return null;
+    return <Navigate to={parseRedirectUrl(redirectTo, location, options)} />;
   };
 
   return <>{condition ? children : fallback()}</>;

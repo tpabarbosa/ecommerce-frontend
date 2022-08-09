@@ -49,7 +49,7 @@ const CategoryProducts = () => {
     }
     setQuery({} as IQuery);
     setBaseUrl('');
-  }, [searchParams, params, baseUrl]);
+  }, [searchParams, params]);
 
   const handleChangePage = (newPage: number) => {
     navigate(`${baseUrl}&page=${newPage}`);

@@ -4,9 +4,11 @@ import styled from 'styled-components';
 import AddToCartButton from '../../../components/Cart/AddToCartButton';
 import IncreaseDecreaseQuantity from '../../../components/Cart/IncreaseDecreaseQuantity';
 import Sizes from '../../../components/Cart/Sizes';
+import ToogleToWishListButton from '../../../components/WishList/ToggleToWishListButton';
 import useCart from '../../../contexts/Cart';
 import { ICartProduct } from '../../../contexts/Cart/cart.interfaces';
 import { ThemeStyled } from '../../../contexts/Theme/themeCSS.styles';
+import useUser from '../../../contexts/User';
 import { parsePrice } from '../../../helpers/parsers';
 import { IProductDetails, IReviewsList } from '../../../models';
 import { IQuery } from '../../../services/HttpService';
@@ -32,6 +34,7 @@ const Styled = {
   `,
   ImagesWrapper: styled.div`
     flex: 1;
+    position: relative;
   `,
   ProductWrapper: styled.div`
     flex: 1.5;
@@ -74,6 +77,7 @@ const Styled = {
     span {
       font-size: var(--xl);
       font-weight: bold;
+      width: 100%;
     }
 
     img {
@@ -97,6 +101,7 @@ const Styled = {
 const REVIEWS_QUERY: IQuery = { limit: 1, page: 1 };
 
 const ProductDetails = () => {
+  const user = useUser();
   const [product, setProduct] = useState<IProductDetails>();
   const [reviews, setReviews] = useState<IReviewsList>();
   const params = useParams();
@@ -164,6 +169,7 @@ const ProductDetails = () => {
           <Styled.Header>
             <Styled.ImagesWrapper>
               <ImagesDisplayer images={product.photos} />
+              {user.isLoggedIn && <ToogleToWishListButton product={product} />}
             </Styled.ImagesWrapper>
 
             <Styled.ProductWrapper>
@@ -171,7 +177,7 @@ const ProductDetails = () => {
               <div>
                 {reviews && (
                   <FixedRatingStars
-                    value={reviews.average_rate}
+                    value={reviews.average_rate ?? 0}
                     count={reviews.count}
                   />
                 )}
@@ -230,7 +236,7 @@ const ProductDetails = () => {
           <Banner />
           <ThemeStyled.Separator />
 
-          {reviews && (
+          {reviews && reviews.reviews.length > 0 && (
             <>
               <Styled.Block>
                 <Styled.Title>Reviews</Styled.Title>

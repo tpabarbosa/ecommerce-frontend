@@ -66,16 +66,7 @@ const AppRoutes = () => {
             <Route path="shipping" element={<></>} />
             <Route path="terms-of-use" element={<></>} />
 
-            <Route
-              path="give-away-faqs"
-              element={
-                <>
-                  <ProtectedRoute condition={user.isLoggedIn}>
-                    <div>Teste</div>
-                  </ProtectedRoute>
-                </>
-              }
-            />
+            <Route path="give-away-faqs" element={<></>} />
           </Route>
           <Route path="about-us" element={<UnderConstruction />}>
             <Route path="carrers" element={<></>} />
