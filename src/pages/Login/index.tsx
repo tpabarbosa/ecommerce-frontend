@@ -98,6 +98,7 @@ const Login = () => {
     setErrorMessage('');
     const msg = await user.login(data.email, data.password);
     if (msg) {
+      setIsLoading(false);
       setErrorMessage(msg);
     } else {
       setIsLoading(false);

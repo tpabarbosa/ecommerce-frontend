@@ -42,25 +42,21 @@ const addItem = async (
   const authorization = bearerHeader(token);
   const method = Method.POST;
   const body = { product_id, size_id };
-  try {
-    const resp = await request({
-      url,
-      method,
-      authorization,
-      body,
-    });
-    if (resp.status === 'success') {
-      return resp as ISuccessResponse<{
-        item_id: string;
-        size: ISize | null;
-      }>;
-    }
 
-    return resp as IErrorResponse;
-  } catch (error) {
-    console.error(error);
-    return null;
+  const resp = await request({
+    url,
+    method,
+    authorization,
+    body,
+  });
+  if (resp.status === 'success') {
+    return resp as ISuccessResponse<{
+      item_id: string;
+      size: ISize | null;
+    }>;
   }
+
+  return resp as IErrorResponse;
 };
 
 const removeItem = async (user_id: string, token: string, item_id: string) => {
@@ -68,21 +64,16 @@ const removeItem = async (user_id: string, token: string, item_id: string) => {
   const authorization = bearerHeader(token);
   const method = Method.DELETE;
 
-  try {
-    const resp = await request({
-      url,
-      method,
-      authorization,
-    });
-    if (resp.status === 'success') {
-      return resp as ISuccessResponse<undefined>;
-    }
-
-    return resp as IErrorResponse;
-  } catch (error) {
-    console.error(error);
-    return null;
+  const resp = await request({
+    url,
+    method,
+    authorization,
+  });
+  if (resp.status === 'success') {
+    return resp as ISuccessResponse<undefined>;
   }
+
+  return resp as IErrorResponse;
 };
 
 const updateItem = async (
@@ -95,23 +86,17 @@ const updateItem = async (
   const authorization = bearerHeader(token);
   const method = Method.PUT;
 
-  console.log(body);
-  try {
-    const resp = await request({
-      url,
-      method,
-      authorization,
-      body,
-    });
-    if (resp.status === 'success') {
-      return resp as ISuccessResponse<ICartProduct>;
-    }
-
-    return resp as IErrorResponse;
-  } catch (error) {
-    console.error(error);
-    return null;
+  const resp = await request({
+    url,
+    method,
+    authorization,
+    body,
+  });
+  if (resp.status === 'success') {
+    return resp as ISuccessResponse<ICartProduct>;
   }
+
+  return resp as IErrorResponse;
 };
 
 const clearCart = async (user_id: string, token: string) => {
@@ -119,21 +104,16 @@ const clearCart = async (user_id: string, token: string) => {
   const authorization = bearerHeader(token);
   const method = Method.DELETE;
 
-  try {
-    const resp = await request({
-      url,
-      method,
-      authorization,
-    });
-    if (resp.status === 'success') {
-      return resp as ISuccessResponse<undefined>;
-    }
-
-    return resp as IErrorResponse;
-  } catch (error) {
-    console.error(error);
-    return null;
+  const resp = await request({
+    url,
+    method,
+    authorization,
+  });
+  if (resp.status === 'success') {
+    return resp as ISuccessResponse<undefined>;
   }
+
+  return resp as IErrorResponse;
 };
 
 const cart = { getCart, addItem, removeItem, updateItem, clearCart };

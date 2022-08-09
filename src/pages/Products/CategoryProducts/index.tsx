@@ -13,6 +13,7 @@ const CategoryProducts = () => {
   const [categorySlug, setCategorySlug] = useState('');
   const [query, setQuery] = useState<IQuery>();
   const [productsList, setProductsList] = useState<IProductsList>();
+  const [errorMessage, setErrorMessage] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
 
   const getCategoryProducts = async (slug: string, queryObj?: IQuery) => {
@@ -20,7 +21,7 @@ const CategoryProducts = () => {
     if (list && list.status === 'success') {
       setProductsList(list.data);
     } else {
-      setProductsList(undefined);
+      setErrorMessage(list.message);
     }
   };
 
@@ -61,6 +62,7 @@ const CategoryProducts = () => {
                 : 'Products List'
             }
             productsList={productsList}
+            errorMessage={errorMessage}
           />
           <Pagination
             page={productsList.page}

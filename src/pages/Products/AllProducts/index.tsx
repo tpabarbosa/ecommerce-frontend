@@ -10,6 +10,7 @@ import { IQuery } from '../../../services/HttpService';
 const AllProducts = () => {
   const [searchParams] = useSearchParams();
   const [productsList, setProductsList] = useState<IProductsList>();
+  const [errorMessage, setErrorMessage] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
 
   const getProducts = async (queryObj?: IQuery) => {
@@ -17,7 +18,7 @@ const AllProducts = () => {
     if (list && list.status === 'success') {
       setProductsList(list.data);
     } else {
-      setProductsList(undefined);
+      setErrorMessage(list.message);
     }
   };
 
@@ -37,6 +38,7 @@ const AllProducts = () => {
           <ProductCardList
             title={productsList.category ?? 'Products List'}
             productsList={productsList}
+            errorMessage={errorMessage}
           />
           <Pagination
             page={productsList.page}

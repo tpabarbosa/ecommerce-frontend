@@ -5,14 +5,14 @@ import ProductCardList from '../../../components/ProductCardList';
 
 const Featured = () => {
   const [productsList, setProductsList] = useState<IProductsList>();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const getProducts = async () => {
     const list = await productsHttp.getFeatured();
-
     if (list && list.status === 'success') {
       setProductsList(list.data);
     } else {
-      setProductsList(undefined);
+      setErrorMessage(list.message);
     }
   };
 
@@ -21,7 +21,11 @@ const Featured = () => {
   }, []);
 
   return (
-    <ProductCardList title="Featured Products" productsList={productsList} />
+    <ProductCardList
+      title="Featured Products"
+      productsList={productsList}
+      errorMessage={errorMessage}
+    />
   );
 };
 

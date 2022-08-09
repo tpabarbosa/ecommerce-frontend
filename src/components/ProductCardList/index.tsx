@@ -3,6 +3,7 @@ import Loading from '../../components/Layout/Loading';
 import ProductCard from '../../components/ProductCard';
 import { IProductsList } from '../../models';
 import { ThemeStyled } from '../../contexts/Theme/themeCSS.styles';
+import ErrorMessage from '../Layout/ErrorMessage';
 
 const Styled = {
   ProductsWrapper: styled.div`
@@ -21,14 +22,22 @@ const Styled = {
 type ProductCardListProps = {
   title?: string;
   productsList: IProductsList | undefined;
+  errorMessage: string;
 };
 
-const ProductCardList = ({ title, productsList }: ProductCardListProps) => {
+const ProductCardList = ({
+  title,
+  productsList,
+  errorMessage,
+}: ProductCardListProps) => {
   return (
     <ThemeStyled.PageContentWrapper>
       <ThemeStyled.Title>{title}</ThemeStyled.Title>
 
-      {!productsList && <Loading />}
+      {!productsList && !errorMessage && <Loading size={'large'} />}
+      {!productsList && errorMessage && (
+        <ErrorMessage size={'large'} message={errorMessage} />
+      )}
       {productsList && productsList.products.length === 0 && (
         <Styled.Text>No products were found</Styled.Text>
       )}
