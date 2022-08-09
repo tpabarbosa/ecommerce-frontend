@@ -1,14 +1,14 @@
-import { FaBookmark, FaCheckDouble } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+
 import { IProduct } from '../../models';
 import { ThemeStyled } from '../../contexts/Theme/themeCSS.styles';
-// import useCart from '../../contexts/Cart';
+
 import { parsePrice } from '../../helpers/parsers';
 import useUser from '../../contexts/User';
-import { useEffect, useState } from 'react';
-import TooltipBox from '../Layout/TooltipBox';
+
 import AddToCartButton from '../Cart/AddToCartButton';
+import ToogleToWishListButton from '../WishList/ToggleToWishListButton';
 
 type ProductCardProps = {
   product: IProduct;
@@ -65,20 +65,7 @@ const Styled = {
     text-align: center;
     margin: var(--m);
   `,
-  FavoriteButton: styled(ThemeStyled.RoundButton).attrs({
-    size: 'custom',
-    custom: '2.5rem',
-  })<{ inWishList: boolean }>(
-    ({ inWishList }) => css`
-      position: absolute;
-      top: 0;
-      right: 0;
-      margin: var(--xs);
-      padding: var(--xs);
-      text-align: center;
-      color: ${inWishList ? 'gold' : ''};
-    `
-  ),
+
   Image: styled.img`
     width: 100%;
     aspect-ratio: 1;
@@ -114,37 +101,10 @@ const Styled = {
       transform: rotate(-15deg);
     }
   `,
-  Tooltip: styled.div`
-    font-size: var(--m);
-  `,
-};
-
-const isInWishlist = (product: IProduct, wishList: IProduct[]) => {
-  const isInList = wishList.find((item) => item.id === product.id);
-  if (isInList) {
-    return true;
-  }
-  return false;
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  // const cart = useCart();
   const user = useUser();
-  const [inWishList, setInWishList] = useState(false);
-
-  const handleToggleWishlist = () => {
-    if (inWishList) {
-      user.removeWishListProduct(product);
-      setInWishList(false);
-    } else {
-      user.addWishListProduct(product);
-      setInWishList(true);
-    }
-  };
-
-  useEffect(() => {
-    setInWishList(isInWishlist(product, user.wishList));
-  }, [user.wishList]);
 
   return (
     <Styled.Wrapper>
@@ -182,21 +142,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div></div>
         </div>
       </Link>
-      {user.isLoggedIn && (
-        <Styled.FavoriteButton
-          inWishList={inWishList}
-          onClick={handleToggleWishlist}
-        >
-          <TooltipBox
-            element={inWishList ? <FaCheckDouble /> : <FaBookmark />}
-            tooltip={
-              <Styled.Tooltip>
-                {inWishList ? 'Remove from Wish List' : 'Add to Wish List'}
-              </Styled.Tooltip>
-            }
-          />
-        </Styled.FavoriteButton>
-      )}
+      {user.isLoggedIn && <ToogleToWishListButton product={product} />}
       <AddToCartButton product={product} />
     </Styled.Wrapper>
   );
