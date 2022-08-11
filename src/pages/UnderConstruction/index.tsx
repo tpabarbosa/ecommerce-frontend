@@ -28,7 +28,7 @@ const UnderConstruction = () => {
     <main>
       <Styled.Wrapper>
         <ThemeStyled.Title>
-          {location.pathname} is not available
+          {location.pathname} is under construction
         </ThemeStyled.Title>
         <img src={image} alt="Under Construction" />
         <Outlet />
