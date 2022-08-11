@@ -59,7 +59,7 @@ const CartContent = () => {
   const navigate = useNavigate();
 
   const handleCheckout = async () => {
-    navigate('user/checkout');
+    navigate('/user/checkout');
   };
 
   return (
