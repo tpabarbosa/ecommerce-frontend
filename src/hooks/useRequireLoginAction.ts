@@ -20,7 +20,9 @@ const useRequireLoginAction = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isPerformingAction, setIsPerformingAction] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [isExecutingAfterRedirection, setIsExecutingAfterRedirection] =
+    useState(false);
 
   const handle = async () => {
     if (!user.isLoggedIn) {
@@ -31,10 +33,10 @@ const useRequireLoginAction = ({
         })
       );
     } else {
-      if (!isPerformingAction) {
-        setIsPerformingAction(true);
+      if (!isExecuting) {
+        setIsExecuting(true);
         await actionCb();
-        setIsPerformingAction(false);
+        setIsExecuting(false);
       }
     }
   };
@@ -46,22 +48,30 @@ const useRequireLoginAction = ({
       if (
         action === actionName &&
         value === actionValue &&
-        !isPerformingAction
+        !isExecuting &&
+        !isExecutingAfterRedirection
       ) {
-        handle().then(() => {
-          let queryStr = '';
-          searchParams.forEach((val, key) => {
-            if (key !== 'action') {
-              queryStr += `&${key}=${val}`;
-            }
-          });
-          setSearchParams(queryStr, { replace: true });
-        });
+        setIsExecutingAfterRedirection(true);
       }
     }
   }, [searchParams]);
 
-  return { isPerformingAction, handle };
+  useEffect(() => {
+    if (isExecutingAfterRedirection) {
+      handle().then(() => {
+        let queryStr = '';
+        searchParams.forEach((val, key) => {
+          if (key !== 'action') {
+            queryStr += `&${key}=${val}`;
+          }
+        });
+        setSearchParams(queryStr, { replace: true });
+        setIsExecutingAfterRedirection(false);
+      });
+    }
+  }, [isExecutingAfterRedirection]);
+
+  return { isExecuting, isExecutingAfterRedirection, handle };
 };
 
 export default useRequireLoginAction;

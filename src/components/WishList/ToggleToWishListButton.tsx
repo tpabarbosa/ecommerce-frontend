@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { ThemeStyled } from '../../contexts/Theme/themeCSS.styles';
@@ -44,15 +45,14 @@ const ToogleToWishListButton = ({ product }: ToogleToWishListButtonProps) => {
   };
 
   const handleToggleWishlist = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (!action.isPerformingAction) {
-      if (isInWishlist(product, user.wishList)) {
+    if (isInWishlist(product, user.wishList)) {
+      if (!action.isExecutingAfterRedirection) {
         await user.removeWishListProduct(product);
         setInWishList(false);
-      } else {
-        await user.addWishListProduct(product);
-        setInWishList(true);
       }
+    } else {
+      await user.addWishListProduct(product);
+      setInWishList(true);
     }
   };
 

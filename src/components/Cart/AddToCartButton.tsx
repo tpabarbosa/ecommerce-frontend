@@ -12,9 +12,8 @@ const AddToCartButton = ({ product }: AddToCartButtonProps) => {
 
   const handleAddToCart = async () => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (!addToCartAction.isPerformingAction) {
-      await cart.addProduct(product);
-    }
+
+    await cart.addProduct(product);
   };
 
   const addToCartAction = useRequireLoginAction({
