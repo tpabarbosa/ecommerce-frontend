@@ -92,7 +92,7 @@ const CartItem = ({ item }: CartItemProps) => {
 
   return (
     <Styled.Wrapper>
-      <Link to={`product/${item.product.slug}`}>
+      <Link to={`/product/${item.product.slug}`}>
         <Styled.ProductHeader>
           <Styled.ImageContainer>
             <Styled.Image
