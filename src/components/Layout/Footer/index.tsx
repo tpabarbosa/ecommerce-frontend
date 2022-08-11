@@ -16,6 +16,7 @@ const Styled = {
     justify-content: space-between;
     margin: 0 auto;
     min-height: 280px;
+    padding: 0 var(--xl);
   `,
 
   Details: styled.details`
@@ -27,7 +28,7 @@ const Styled = {
       margin: 0;
     }
     @media (min-width: 960px) {
-      max-width: 19vw;
+      max-width: 18vw;
       margin: 0;
     }
 
