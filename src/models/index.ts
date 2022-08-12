@@ -47,7 +47,7 @@ export interface IReviewsList {
 
 export interface IReview {
   id: string;
-  user: { firstname: string; lastname: string };
+  user: { id: string; firstname: string; lastname: string };
   title: string;
   content: string;
   recommend: boolean;

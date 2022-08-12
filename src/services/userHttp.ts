@@ -8,7 +8,7 @@ import request, {
 } from './HttpService';
 import config from '../config';
 import { Buffer } from 'buffer';
-import { IProduct } from '../models';
+import { IProduct, IReview } from '../models';
 const baseUrl = config.api.url;
 
 const getUser = async (user: IUserAuth) => {
@@ -153,6 +153,27 @@ const addWishListProduct = async (
   return resp as IErrorResponse;
 };
 
+const getReview = async (
+  user_id: string,
+  token: string,
+  product_id: string
+) => {
+  const url = `${baseUrl}/users/${user_id}/reviews/${product_id}`;
+  const authorization = bearerHeader(token);
+  const method = Method.GET;
+
+  const resp = await request({
+    url,
+    method,
+    authorization,
+  });
+  if (resp.status === 'success') {
+    return resp as ISuccessResponse<IReview | null>;
+  }
+
+  return resp as IErrorResponse;
+};
+
 const user = {
   getUser,
   login,
@@ -161,6 +182,7 @@ const user = {
   getWishList,
   removeWishListProduct,
   addWishListProduct,
+  getReview,
 };
 
 export default user;

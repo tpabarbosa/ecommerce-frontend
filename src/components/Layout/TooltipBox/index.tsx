@@ -33,8 +33,7 @@ const TooltipContent = styled.div`
   }
 `;
 const TooltipCard = styled.div`
-  margin: var(--m);
-
+  position: relative;
   & ${TooltipText}:hover + ${TooltipContent} {
     visibility: visible;
     color: #fff;

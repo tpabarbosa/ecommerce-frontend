@@ -180,6 +180,14 @@ const useUser = () => {
     return loggedUser && loggedUser.message;
   };
 
+  const getReview = async (product_id: string) => {
+    if (!user.isLoggedIn) return;
+    const resp = await userHttp.getReview(user.user.id, user.token, product_id);
+    if (resp && resp.status === 'success') {
+      return resp.data;
+    }
+  };
+
   return {
     register,
     login,
@@ -193,6 +201,7 @@ const useUser = () => {
     wishList: user.wishList,
     removeWishListProduct,
     addWishListProduct,
+    getReview,
   };
 };
 

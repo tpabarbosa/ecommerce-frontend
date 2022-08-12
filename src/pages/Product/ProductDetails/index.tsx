@@ -8,9 +8,10 @@ import ToogleToWishListButton from '../../../components/WishList/ToggleToWishLis
 import useCart from '../../../contexts/Cart';
 import { ICartProduct } from '../../../contexts/Cart/cart.interfaces';
 import { ThemeStyled } from '../../../contexts/Theme/themeCSS.styles';
+import useUser from '../../../contexts/User';
 
 import { parsePrice } from '../../../helpers/parsers';
-import { IProductDetails, IReviewsList } from '../../../models';
+import { IProductDetails, IReview, IReviewsList } from '../../../models';
 import { IQuery } from '../../../services/HttpService';
 import productsHttp from '../../../services/produtcsHttp';
 import Banner from '../../Home/Banner';
@@ -98,13 +99,15 @@ const Styled = {
   `,
 };
 
-const REVIEWS_QUERY: IQuery = { limit: 1, page: 1 };
+const REVIEWS_QUERY: IQuery = { limit: 10, page: 1 };
 
 const ProductDetails = () => {
   const [product, setProduct] = useState<IProductDetails>();
   const [reviews, setReviews] = useState<IReviewsList>();
+  const [userReview, setUserReview] = useState<IReview | null>();
   const params = useParams();
   const cart = useCart();
+  const user = useUser();
   const [isInCart, setIsInCart] = useState(false);
   const [cartItem, setCartItem] = useState<ICartProduct>();
 
@@ -149,9 +152,17 @@ const ProductDetails = () => {
     }
   }, [cart, product]);
 
+  const getUserReview = async (product_id: string) => {
+    const resp = await user.getReview(product_id);
+    setUserReview(resp);
+  };
+
   useEffect(() => {
     getReviews(REVIEWS_QUERY);
-  }, [product]);
+    if (user.isLoggedIn && product) {
+      getUserReview(product.id);
+    }
+  }, [product, user.isLoggedIn]);
 
   useEffect(() => {
     getDetails();
@@ -242,6 +253,7 @@ const ProductDetails = () => {
                 <Reviews
                   reviews={reviews}
                   onChangeReviewsPage={handleChangeReviewPage}
+                  userReview={userReview}
                 />
               </Styled.Block>
             </>

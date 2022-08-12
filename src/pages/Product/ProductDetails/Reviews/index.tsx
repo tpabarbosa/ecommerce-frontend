@@ -1,13 +1,12 @@
-import { FaRegThumbsUp, FaRegThumbsDown } from 'react-icons/fa';
 import styled from 'styled-components';
 import Pagination from '../../../../components/Layout/Pagination';
-import { ThemeStyled } from '../../../../contexts/Theme/themeCSS.styles';
-import { IReviewsList } from '../../../../models';
-import FixedRatingStars from '../FixedRatingStars';
+import { IReviewsList, IReview } from '../../../../models';
+import ReviewItem from './ReviewItem';
 
 type ReviewsProps = {
   reviews: IReviewsList;
   onChangeReviewsPage: (newPage: number) => void;
+  userReview: IReview | undefined | null;
 };
 
 const Styled = {
@@ -17,100 +16,25 @@ const Styled = {
     display: flex;
     flex-wrap: wrap;
   `,
-  ItemWrapper: styled.div`
-    /* max-width: 500px; */
-    width: 95%;
-    margin: var(--xl) auto;
-    box-shadow: 0 2px 5px 0px var(--p-color);
-    display: flex;
-    flex-direction: column;
-    @media (min-width: 720px) {
-      max-width: 45%;
-    }
-
-    @media (min-width: 960px) {
-      max-width: 40%;
-    }
-  `,
-  TitleWrapper: styled.div`
-    background-color: var(--p-color);
-    color: var(--p-bg);
-    padding: 0 var(--l);
-    padding-top: var(--xm);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: var(--l);
-    @media (min-width: 768px) {
-      flex-direction: row;
-      padding-top: 0;
-    }
-  `,
-  Title: styled.h4`
-    font-size: var(--l);
-    font-weight: bold;
-    text-align: center;
-  `,
-  Content: styled.span`
-    padding: var(--l) var(--s);
-  `,
-  ContentWrapper: styled(ThemeStyled.Box).attrs({ type: 'tertiary' })`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    @media (min-width: 768px) {
-      flex-direction: row;
-    }
-  `,
-  UserWrapper: styled(ThemeStyled.Box).attrs({ type: 'secondary' })`
-    padding: var(--l) var(--l);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--s);
-    @media (min-width: 768px) {
-      border-left: 1px solid var(--p-color);
-    }
-  `,
-  User: styled.strong`
-    font-size: var(--xm);
-  `,
-  Recommend: styled.div`
-    font-size: var(--xl);
-  `,
-  Date: styled.div`
-    font-size: var(--s);
-  `,
 };
 
-const Reviews = ({ reviews, onChangeReviewsPage }: ReviewsProps) => {
+const Reviews = ({
+  reviews,
+  onChangeReviewsPage,
+  userReview,
+}: ReviewsProps) => {
   return (
     <>
       <Styled.Wrapper>
         {reviews &&
-          reviews.reviews.map((review) => (
-            <Styled.ItemWrapper key={review.id}>
-              <Styled.TitleWrapper>
-                <Styled.Title>{review.title}</Styled.Title>
-                <FixedRatingStars value={review.rating} />
-              </Styled.TitleWrapper>
-              <Styled.ContentWrapper>
-                <Styled.Content>{review.content}</Styled.Content>
-                <Styled.UserWrapper>
-                  <Styled.User>{review.user.firstname}</Styled.User>
-                  <Styled.Recommend>
-                    {review.recommend ? <FaRegThumbsUp /> : <FaRegThumbsDown />}
-                  </Styled.Recommend>
-                  <Styled.Date>
-                    <div>last update</div>
-                    {new Date(review.updated_at).toLocaleDateString()}
-                  </Styled.Date>
-                </Styled.UserWrapper>
-              </Styled.ContentWrapper>
-            </Styled.ItemWrapper>
-          ))}
+          reviews.reviews.map(
+            (review) =>
+              review.id !== userReview?.id && (
+                <ReviewItem review={review} key={review.id} />
+              )
+          )}
+        {userReview && <ReviewItem review={userReview} isUser />}
+        {!userReview && <ReviewItem review={userReview} />}
       </Styled.Wrapper>
       <Pagination
         page={reviews.page}
