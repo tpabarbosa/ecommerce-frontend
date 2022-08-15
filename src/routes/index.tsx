@@ -17,6 +17,7 @@ import Register from '../pages/LoginOrRegister/Register';
 import Logout from '../pages/Logout';
 import useUser from '../contexts/User';
 import ProtectedRoute from './ProtectedRoute';
+import SearchProducts from '../pages/Products/SearchProducts';
 
 const AppRoutes = () => {
   const user = useUser();
@@ -51,7 +52,7 @@ const AppRoutes = () => {
           </Route>
           <Route path="products" element={<Products />}>
             <Route index element={<AllProducts />} />
-            <Route path="search" element={<></>} />
+            <Route path="search" element={<SearchProducts />} />
             <Route path=":categorySlug" element={<CategoryProducts />} />
           </Route>
           <Route path="help" element={<UnderConstruction />}>

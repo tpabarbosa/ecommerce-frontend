@@ -9,6 +9,8 @@ import CartModal from '../../Cart/CartModal';
 import MenuModal from './MenuModal';
 import useUser from '../../../contexts/User';
 import ProtectedContent from '../ProtectedContent';
+import { SearchBox } from '../SearchBox';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const Styled = {
   Wrapper: styled(ThemeStyled.Box).attrs({ as: 'section', type: 'tertiary' })`
@@ -37,6 +39,7 @@ const NavLine = () => {
   const [searchParams] = useSearchParams();
   const menuModal = useModal();
   const cartModal = useModal();
+  const [windowWidth] = useWindowSize();
 
   useEffect(() => {
     menuModal.close();
@@ -44,31 +47,39 @@ const NavLine = () => {
   }, [params, searchParams]);
 
   return (
-    <Styled.Wrapper>
-      <Styled.Button onClick={menuModal.toggle}>
-        <FaBars />
-      </Styled.Button>
-      <MenuModal modal={menuModal} />
+    <>
+      {windowWidth <= 768 && (
+        <Styled.Wrapper>
+          <SearchBox />
+        </Styled.Wrapper>
+      )}
+      <Styled.Wrapper>
+        <Styled.Button onClick={menuModal.toggle}>
+          <FaBars />
+        </Styled.Button>
+        <MenuModal modal={menuModal} />
+        {windowWidth > 768 && <SearchBox />}
 
-      <Styled.CartButtonWrapper>
-        <ProtectedContent condition={user.isLoggedIn}>
-          <Styled.Button onClick={() => navigate('/user/wishlist')}>
-            <FaBookmark />
-          </Styled.Button>
-          <CartButton onClick={cartModal.toggle} />
-          <Styled.Button onClick={() => navigate('/logout')}>
-            <FaSignOutAlt />
-          </Styled.Button>
-        </ProtectedContent>
+        <Styled.CartButtonWrapper>
+          <ProtectedContent condition={user.isLoggedIn}>
+            <Styled.Button onClick={() => navigate('/user/wishlist')}>
+              <FaBookmark />
+            </Styled.Button>
+            <CartButton onClick={cartModal.toggle} />
+            <Styled.Button onClick={() => navigate('/logout')}>
+              <FaSignOutAlt />
+            </Styled.Button>
+          </ProtectedContent>
 
-        <ProtectedContent condition={!user.isLoggedIn}>
-          <Styled.Button onClick={() => navigate('/login')}>
-            <FaSignInAlt />
-          </Styled.Button>
-        </ProtectedContent>
-      </Styled.CartButtonWrapper>
-      <CartModal modal={cartModal} />
-    </Styled.Wrapper>
+          <ProtectedContent condition={!user.isLoggedIn}>
+            <Styled.Button onClick={() => navigate('/login')}>
+              <FaSignInAlt />
+            </Styled.Button>
+          </ProtectedContent>
+        </Styled.CartButtonWrapper>
+        <CartModal modal={cartModal} />
+      </Styled.Wrapper>
+    </>
   );
 };
 
